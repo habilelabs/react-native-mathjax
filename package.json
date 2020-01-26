@@ -19,5 +19,8 @@
     "equation"
   ],
   "author": "Shankar Morwal <shankar@habilelabs.io>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "react-native-autoheight-webview": "^1.4.1"
+  }
 }
