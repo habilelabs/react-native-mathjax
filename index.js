@@ -17,25 +17,13 @@ const defaultOptions = {
     }
 };
 
-class MathJax extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            height: 1
-        };
-    }
-
-    handleMessage(message) {
-        this.setState({
-            height: Number(message.nativeEvent.data)
-        });
-    }
-
-    wrapMathjax(content) {
+function MathJax(props) {
+    const {html, mathJaxOptions} = props;
+    //wrap html in math jaxx.
+    function wrapMathjax() {
         const options = JSON.stringify(
-            Object.assign({}, defaultOptions, this.props.mathJaxOptions)
+            Object.assign({}, defaultOptions, mathJaxOptions)
         );
-
         return `
 			<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 			<script type="text/x-mathjax-config">
@@ -47,27 +35,22 @@ class MathJax extends React.Component {
 					document.getElementById("formula").style.visibility = '';
 				});
 			</script>
-
 			<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js"></script>
 			<div id="formula" style="visibility: hidden;">
-				${content}
+				${html}
 			</div>
 		`;
     }
-    render() {
-        const html = this.wrapMathjax(this.props.html);
-
-        // Create new props without `props.html` field. Since it's deprecated.
-        const props = Object.assign({}, this.props, { html: undefined });
-        return (
-            <AutoHeightWebView
-                source={{html}}
-                scalesPageToFit={true}
-                viewportContent={'width=device-width, user-scalable=no'}
-                {...props}
-            />
-        )
-    }
+    const calculatedHtml = wrapMathjax();
+    // Create new props without `props.html` field. Since it's deprecated.
+    const calculatedProps = Object.assign({}, props, { html: undefined });
+    return (
+        <AutoHeightWebView
+            source={{html: calculatedHtml}}
+            scalesPageToFit={true}
+            viewportContent={'width=device-width, user-scalable=no'}
+            {...calculatedProps}
+        />
+    )
 }
-
 export default MathJax;
