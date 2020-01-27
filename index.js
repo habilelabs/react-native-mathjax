@@ -19,7 +19,6 @@ const defaultOptions = {
 
 function MathJax(props) {
     const {html, mathJaxOptions, styles} = props;
-    let isMathJaxPresent = false;
 
     //wrap html in math jaxx.
     function wrapMathjax() {
@@ -27,10 +26,9 @@ function MathJax(props) {
             Object.assign({}, defaultOptions, mathJaxOptions)
         );
         //if not mathjax present then we do not need to use mathjax.
-        if (!html || html.indexOf('$$') === -1) {
+        if (!html || (html.indexOf('$$') === -1 && html.indexOf('$') === -1)) {
             return html;
         } else {
-            isMathJaxPresent = true;
             return `<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
                 <script type="text/x-mathjax-config">
                     MathJax.Hub.Config(${options});
@@ -52,7 +50,6 @@ function MathJax(props) {
     const calculatedProps = Object.assign({}, props, {html: undefined});
     const calculatedStyles = Object.assign({}, {width: Dimensions.get('window').width - 30}, styles);
     function onSizeUpdated(size) {
-        console.log('------------>>>', size, calculatedStyles);
     }
     return (
         <AutoHeightWebView
