@@ -1,5 +1,5 @@
 import React from 'react';
-import {WebView } from 'react-native-webview';
+import {WebView} from 'react-native-webview';
 import {View, Dimensions} from "react-native";
 import AutoHeightWebView from 'react-native-autoheight-webview';
 
@@ -26,7 +26,10 @@ function MathJax(props) {
             Object.assign({}, defaultOptions, mathJaxOptions)
         );
         //if not mathjax present then we do not need to use mathjax.
-        if (!html || (html.indexOf('$$') === -1 && html.indexOf('$') === -1)) {
+        if (!html || (html.indexOf('$$') === -1 &&
+            html.indexOf('$') === -1 &&
+            html.indexOf('\(') === -1 &&
+            html.indexOf('\[') === -1)) {
             return html;
         } else {
             return `<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -49,8 +52,10 @@ function MathJax(props) {
     // Create new props without `props.html` field. Since it's deprecated.
     const calculatedProps = Object.assign({}, props, {html: undefined});
     const calculatedStyles = Object.assign({}, {width: Dimensions.get('window').width - 30}, styles);
+
     function onSizeUpdated(size) {
     }
+
     return (
         <AutoHeightWebView
             style={calculatedStyles}
